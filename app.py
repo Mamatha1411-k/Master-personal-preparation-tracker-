@@ -14,28 +14,28 @@ if 'subjects_completed' not in st.session_state: st.session_state.subjects_compl
 if 'mock_scores' not in st.session_state: st.session_state.mock_scores = []
 
 # --- THEME (Dark Mode Styling via Markdown Injection) ---
+# FIXED: Changed unsafe_style_html to unsafe_allow_html
 st.markdown("""
     <style>
     .stApp { background-color: #0E1117; color: #FFFFFF; }
     div.stButton > button:first-child { background-color: #FF4B4B; color: white; border-radius:8px;}
     </style>
-""", unsafe_style_html=True)
+""", unsafe_allow_html=True)
 
 # --- APP BANNER & MAIN TOP APP HEADER ---
 st.title("🎯 GATE Master AI")
 st.caption("🚀 Preparation Kickoff: Day 1 Starts Tomorrow (July 1, 2026)!")
 
-# --- BOTTOM / TOP STREAMLIT NAV TABS ---
+# --- NAVIGATION TABS ---
 nav_tab = st.radio("📱 Navigation Menu", 
                    ["🏠 Dashboard", "✅ Daily & Weekly Planner", "📚 Subject & PYQ Tracker", "📊 Analytics & Badges", "🤖 GATE Master AI"], 
                    horizontal=True)
 
 st.markdown("---")
 
-# --- DATE CALCULATIONS (FIXED TO YOUR TIMELINE) ---
-today = datetime.date(2026, 6, 30) # Set to June 30, 2026
+# --- DATE CALCULATIONS ---
 start_date = datetime.date(2026, 7, 1) # Prep starts July 1, 2026
-exam_date = datetime.date(2027, 2, 7) # Typical GATE weekend Feb 2027
+exam_date = datetime.date(2027, 2, 7) # Expected exam date
 
 days_left = (exam_date - datetime.date.today()).days
 
@@ -70,7 +70,6 @@ if nav_tab == "🏠 Dashboard":
 elif nav_tab == "✅ Daily & Weekly Planner":
     st.header("📅 Execution Center")
     
-    # 7-Hour Tracker Component
     st.subheader("⏱ 7-Hour Mandatory GATE Timer Logs")
     hours_logged = st.slider("Select how many study sessions (1 hr each) completed today:", 0, 7, 0)
     st.progress(hours_logged / 7.0)
@@ -133,14 +132,12 @@ elif nav_tab == "📚 Subject & PYQ Tracker":
 elif nav_tab == "📊 Analytics & Badges":
     st.header("📊 Deep Performance Analytics")
     
-    # Mock scores display
     st.subheader("📝 Mock Test Score Trajectory")
     if len(st.session_state.mock_scores) > 0:
         st.line_chart(st.session_state.mock_scores)
     else:
         st.info("No mock test data logged yet. Take your first test this weekend!")
     
-    # Gamification Badges
     st.subheader("🏆 Your Earned Badges Hall")
     b_col1, b_col2, b_col3 = st.columns(3)
     with b_col1:
@@ -178,9 +175,11 @@ elif nav_tab == "🤖 GATE Master AI":
         
     elif ai_features == "💬 Custom Motivational Charge":
         quotes = [
-            "Tomorrow is Day 1. No excuses, no shortcuts. Your GATE 2027 rank journey starts now! 🔥",
+            "Tomorrow is Day 1. No excuses, no shortcuts. Your GATE journey starts now! 🔥",
             "Consistent 7 hours beats a 14-hour single burst every single time. Start strong tomorrow!",
             "Every single task you tick off tomorrow brings you closer to your dream IISc/IIT seat."
         ]
         st.success(random.choice(quotes))
+        
+
       
